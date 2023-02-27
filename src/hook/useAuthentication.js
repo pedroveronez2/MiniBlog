@@ -27,7 +27,7 @@ export const useAuthentication = () => {
                 data.password
             )
             await updateProfile(user, {
-                name: data.name
+                displayName: data.displayName
             })
         } catch (error) {
             console.log(error.message, typeof error.messege)
