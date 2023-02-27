@@ -11,6 +11,10 @@ import MyFooter from './components/MyFooter';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
 
+// context
+import { AuthProvider } from './context/AuthContext';
+
+
 function App() {
   return (
     <div className="App">
