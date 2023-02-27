@@ -1,7 +1,12 @@
 import { NavLink } from 'react-router-dom';
 
+import {useAuthentication} from '../../hook/useAuthentication'
+
+import {useAuthValue} from '../../context/AuthContext'
 
 function MyNavbar() {
+  const { user } = useAuthValue()
+
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -18,12 +23,26 @@ function MyNavbar() {
             <li className="nav-item">
               <NavLink className="nav-link" activeClassName="active" to="/about">about</NavLink>
             </li>
+            {!user && (
+              <>
             <li className="nav-item">
               <NavLink className="nav-link" activeClassName="active" exact to="/register">Register</NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" activeClassName="active" to="/login">Login</NavLink>
             </li>
+              </>
+            )}
+            {user && (
+            <>
+            <li className="nav-item">
+              <NavLink className="nav-link" activeClassName="active" exact to="/posts/create">New Post</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" activeClassName="active" to="/deshboard">Deshboard</NavLink>
+            </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { useAuthentication } from '../../hook/useAuthentication';
 function Register() {
   const [error, setError] = useState(null)
 
-  const [name, setName] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -16,7 +16,7 @@ function Register() {
   const {createUser, loading, error: authError} = useAuthentication()
 
   const handleNameChange = (event) => {
-    setName(event.target.value);
+    setDisplayName(event.target.value);
   };
 
   const handleEmailChange = (event) => {
@@ -39,7 +39,7 @@ function Register() {
     event.preventDefault();
 
     const user = {
-      name,
+      displayName,
       email,
       password
     }
@@ -47,7 +47,7 @@ function Register() {
       return alert('As senhas precisam ser iguais');
     }
   
-    if (!name || !email || !password || !passwordConfirmation || !termsAgreed) {
+    if (!displayName || !email || !password || !passwordConfirmation || !termsAgreed) {
       return alert('Por favor, preencha todos os campos');
     }
 
@@ -87,7 +87,7 @@ function Register() {
                             type="text"
                             id="form3Example1c"
                             className="form-control"
-                            value={name}
+                            value={displayName}
                             onChange={handleNameChange}
                           />
                           <label
