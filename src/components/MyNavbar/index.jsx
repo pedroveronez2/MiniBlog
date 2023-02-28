@@ -6,7 +6,7 @@ import {useAuthValue} from '../../context/AuthContext'
 
 function MyNavbar() {
   const { user } = useAuthValue()
-
+  const { logout } = useAuthentication()
   return (
     <>
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -42,6 +42,11 @@ function MyNavbar() {
               <NavLink className="nav-link" activeClassName="active" to="/deshboard">Deshboard</NavLink>
             </li>
               </>
+            )}
+            {user && (
+              <li>
+                <button type='button' onClick={logout} className='btn btn-danger'>Logout</button>
+              </li>
             )}
           </ul>
         </div>
