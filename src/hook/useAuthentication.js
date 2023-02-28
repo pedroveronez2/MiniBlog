@@ -1,7 +1,7 @@
 import {db } from '../firebase/config'
 
 import {
-    getAuth, createUserWithEmailAndPassword, singnInWithEmailAndPassword, updateProfile, signout
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut
 } from 'firebase/auth'
 
 import { useState, useEffect } from 'react'
@@ -45,10 +45,37 @@ export const useAuthentication = () => {
         setLoading(false)
     }
 
-    // logout
+    // logout - sign - out
+
+    const logout = () => {
+        checkIfIsCancelled()
+        signOut(auth)
+    }
+    // logout - sign - out
+
+    const login = async(data) => {
+        checkIfIsCancelled()
+        setLoading(true)
+        setError(false)
+        try {
+            setLoading(false)
+            await signInWithEmailAndPassword(auth, data.email, data.password)
+        } catch (error) {
+            let systemErrorMessage
+            if (error.message.includes('use-not-found')) {
+                systemErrorMessage = 'Usuario nao encontrado.'
+            } else if(error.message.includes('wrong-password')) {
+                systemErrorMessage = 'Senha incorreta.'
+            } else {
+                systemErrorMessage = 'Ocorreu um error inesperado ao tentar logar na sua conta.'
+            }
+            setError(systemErrorMessage)
+            setLoading(false)
+        }
+    }
     useEffect(() => {
       return () => setCancelled(true)
     }, [])
     
-    return {auth, createUser, loading, error, }
+    return {auth, createUser, loading, error, logout, login}
 }

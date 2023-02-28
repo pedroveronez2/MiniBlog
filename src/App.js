@@ -54,6 +54,7 @@ function App() {
             <Route path='/login' element={!user ? <Login /> : <Navigate to="/" />}/>
             <Route path='/posts/create' element={user ?<CreatePost />: <Navigate to="/login" />}/>
             <Route path='/deshboard' element={user ? <Dashboard /> : <Navigate to="/login"/>}/>
+            
           </Routes>
         <MyFooter />
         </BrowserRouter>
