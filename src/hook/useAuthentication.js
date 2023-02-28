@@ -44,6 +44,8 @@ export const useAuthentication = () => {
         }
         setLoading(false)
     }
+
+    // logout
     useEffect(() => {
       return () => setCancelled(true)
     }, [])
