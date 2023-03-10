@@ -1,22 +1,43 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthValue } from '../../context/AuthContext.js';
+import { useAuthValue } from '../../context/AuthContext';
+import { useInsertDocument } from '../../hook/useInsertDocument';
 
 function CreatePost() {
-  const [error, setError] = useState(null);
   const [title, setTitle] = useState('');
   const [image, setImage] = useState('');
   const [body, setBody] = useState('');
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState('');
   const [formError, setFormError] = useState('');
-  const navigate = useNavigate();
   const { user } = useAuthValue();
+  const { insertDocument, response } = useInsertDocument('posts');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Adicione aqui a lógica para enviar o formulário ao servidor
-    navigate('/'); // redirecionar para a página inicial após o envio
+    try {
+      new URL(image);
+    } catch (error) {
+      setFormError('A "IMAGEM" precisa ser uma URL.');
+      return;
+    }
+
+    const tagsArray = tags.split(',').map((tag) => tag.trim().toLowerCase());
+
+    if (!title || !image || !tags || !body) {
+      setFormError('Atenção: Preencha todos os campos.');
+      return;
+    }
+
+    insertDocument({
+      title,
+      image,
+      tags: tagsArray,
+      body,
+      uid: user.uid,
+      createBy: user.displayName,
+    });
+    navigate('/');
   };
 
   return (
@@ -77,20 +98,19 @@ function CreatePost() {
             name="tags"
             id="tags"
             className="form-control"
-            placeholder="Insira as tags"
+            placeholder="Insira as tags separadas por vírgulas"
             onChange={(e) => setTags(e.target.value)}
             value={tags}
             required
           />
         </div>
         <div className="d-flex justify-content-center m-2">
-          <button type="submit" className="btn btn-primary">
-            Criar
-          </button>
+          {!response.loading && <button className="btn btn-primary">Criar</button>}
         </div>
-      </form>
+        {response.error && <p>{response.error}</p>}
+        </form>
+      {formError && <p className="text-danger">{formError}</p>}
     </div>
   );
 }
-
 export default CreatePost;
